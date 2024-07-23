@@ -8,9 +8,11 @@ public class Ticket {
 
     private String concertHall;
 
-    private byte eventCode;
+    private short eventCode;
 
     private long timeOfCreation;
+
+    private long timeOfEvent;
 
     private boolean isPromo;
 
@@ -20,23 +22,24 @@ public class Ticket {
 
     private BigDecimal price;
 
-    public Ticket(String Id, String concertHall, byte eventCode, boolean isPromo, char stadiumSector, float maxBackpackWeight, BigDecimal price) {
-        this.Id = Id;
-        this.concertHall = concertHall;
-        this.eventCode = eventCode;
+    public Ticket(String Id, String concertHall, short eventCode, long timeOfEvent, boolean isPromo, char stadiumSector, float maxBackpackWeight, BigDecimal price) {
+        setId(Id);
+        setConcertHall(concertHall);
+        setEventCode(eventCode);
+        setTimeOfEvent(timeOfEvent);
         this.timeOfCreation = System.currentTimeMillis() / 1000L;
-        this.isPromo = isPromo;
-        this.stadiumSector = stadiumSector;
-        this.maxBackpackWeight = maxBackpackWeight;
-        this.price = price;
+        setPromo(isPromo);
+        setStadiumSector(stadiumSector);
+        setMaxBackpackWeight(maxBackpackWeight);
+        setPrice(price);
     }
 
     public Ticket() {}
 
-    public Ticket(String concertHall, byte eventCode) {
-        this.concertHall = concertHall;
-        this.eventCode = eventCode;
-        this.timeOfCreation = System.currentTimeMillis() / 1000L;
+    public Ticket(String concertHall, short eventCode, long timeOfEvent) {
+        setConcertHall(concertHall);
+        setEventCode(eventCode);
+        setTimeOfEvent(timeOfEvent);
     }
 
     public String getId() {
@@ -44,7 +47,10 @@ public class Ticket {
     }
 
     public void setId(String id) {
-        Id = id;
+        if (id.length() > 4 && id.matches("[a-zA-Z0-9]+")) {
+            throw new IllegalArgumentException("Illegal ID");
+        }
+        this.Id = id;
     }
 
     public String getConcertHall() {
@@ -52,23 +58,25 @@ public class Ticket {
     }
 
     public void setConcertHall(String concertHall) {
+        if (concertHall.length() > 10 && concertHall.matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException("Illegal concert hall");
+        }
         this.concertHall = concertHall;
     }
 
-    public byte getEventCode() {
+    public short getEventCode() {
         return eventCode;
     }
 
-    public void setEventCode(byte eventCode) {
+    public void setEventCode(short eventCode) {
+        if (eventCode > 999) {
+            throw new IllegalArgumentException("Illegal event code");
+        }
         this.eventCode = eventCode;
     }
 
     public long getTimeOfCreation() {
         return timeOfCreation;
-    }
-
-    public void setTimeOfCreation(long timeOfCreation) {
-        this.timeOfCreation = timeOfCreation;
     }
 
     public boolean isPromo() {
@@ -84,7 +92,11 @@ public class Ticket {
     }
 
     public void setStadiumSector(char stadiumSector) {
-        this.stadiumSector = stadiumSector;
+        if (stadiumSector == 'A' || stadiumSector == 'B' || stadiumSector == 'C') {
+            this.stadiumSector = stadiumSector;
+        } else {
+            throw new IllegalArgumentException("Illegal stadium sector");
+        }
     }
 
     public float getMaxBackpackWeight() {
@@ -101,5 +113,13 @@ public class Ticket {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public long getTimeOfEvent() {
+        return timeOfEvent;
+    }
+
+    public void setTimeOfEvent(long timeOfEvent) {
+        this.timeOfEvent = timeOfEvent;
     }
 }

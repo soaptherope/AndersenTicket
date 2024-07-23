@@ -12,7 +12,11 @@ public class TicketService {
         String concertHall = scanner.nextLine();
 
         System.out.println("Enter Event Code:");
-        byte eventCode = scanner.nextByte();
+        short eventCode = scanner.nextShort();
+        scanner.nextLine();
+
+        System.out.println("Enter time of event:");
+        long timeOfEvent = scanner.nextLong();
         scanner.nextLine();
 
         System.out.println("Do you want to enter additional information? (y/n):");
@@ -37,9 +41,9 @@ public class TicketService {
             System.out.println("Enter Price:");
             BigDecimal price = new BigDecimal(scanner.nextLine());
 
-            Ticket ticket = new Ticket(id, concertHall, eventCode, isPromo, stadiumSector, maxBackpackWeight, price);
+            Ticket ticket = new Ticket(id, concertHall, eventCode, timeOfEvent, isPromo, stadiumSector, maxBackpackWeight, price);
         } else {
-            Ticket ticket =  new Ticket(concertHall, eventCode);
+            Ticket ticket =  new Ticket(concertHall, eventCode, timeOfEvent);
         }
     }
 }
